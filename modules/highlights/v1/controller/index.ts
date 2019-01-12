@@ -13,7 +13,7 @@ function advert(imageBase64hash: string, associatedCategoryId?: number,associate
     }
     if (associatedCategoryId != null && associatedCategoryId != undefined) {
         return {
-            "advertisting-image": imageBase64hash,
+            "advertising-image": imageBase64hash,
             "category-id": associatedCategoryId
         }
     }
