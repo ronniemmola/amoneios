@@ -6,10 +6,30 @@ import { imageDirectory } from '../../../../app';
 const highlightResponse = require('../../../private/highlightedProducts.json');
 const path = require('path');
 
-export async function loadHighlights() {
+
+function advert(imageBase64hash: string, associatedCategoryId?: number,associatedProductsIds?: Array<number>) {
+    if (imageBase64hash == null) {
+        return {}
+    }
+    if (associatedCategoryId != null && associatedCategoryId != undefined) {
+        return {
+            "advertisting-image": imageBase64hash,
+            "category-id": associatedCategoryId
+        }
+    }
+    else if (associatedProductsIds != null && associatedProductsIds != undefined) {
+        return {
+            "advertisting-image": imageBase64hash,
+            "associated-product-ids": associatedProductsIds
+        }
+    } else {
+        return { "advertisting-image": imageBase64hash }
+    }
+}
+
+async function loadHighlights() {
     try {
         const highlights = highlightResponse.highlights;
-
         if (highlights != null && highlights.length > 0) {
             let currentHighlights = new Array();
             highlights.forEach(function (highlight) {
@@ -24,21 +44,11 @@ export async function loadHighlights() {
                 const imageBase64hash = encodeFileIntoBase64(fileName);
 
                 if (categoryId != null && categoryId != 0) {
-                    currentHighlights.push(
-                        {
-                        "advertisting-image": imageBase64hash,
-                        "category-id": categoryId
-                        }
-                    )
+                   currentHighlights.push(advert(imageBase64hash, categoryId))
                 } else if (procutsIds != null) {
-                    currentHighlights.push(
-                        {
-                            "advertisting-image": imageBase64hash,
-                            "associated-product-ids": procutsIds
-                        }
-                    )
+                    currentHighlights.push(advert(imageBase64hash, null, procutsIds))
                 }else {
-                    currentHighlights.push({ "advertisting-image": imageBase64hash })
+                    currentHighlights.push(advert(imageBase64hash))
                 }
             });
             return currentHighlights;
