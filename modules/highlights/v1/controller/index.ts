@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
-import { HTTPCode } from '../../../constants/index';
+import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
 import { encodeFileIntoBase64 } from '../../../core/ImageController';
 import { imageDirectory } from '../../../../app';
 
 const highlightResponse = require('../../../private/highlightedProducts.json');
 const path = require('path');
 
+const kAdvertisingImage = 'advertising-image';
+const kCategoryId = 'category-id';
+const kProductIds = 'associated-product-ids';
 
 function advert(imageBase64hash: string, associatedCategoryId?: number,associatedProductsIds?: Array<number>) {
     if (imageBase64hash == null) {
@@ -13,17 +16,17 @@ function advert(imageBase64hash: string, associatedCategoryId?: number,associate
     }
     if (associatedCategoryId != null && associatedCategoryId != undefined) {
         return {
-            "advertising-image": imageBase64hash,
-            "category-id": associatedCategoryId
+            'advertising-image' : imageBase64hash,
+            'category-id': associatedCategoryId
         }
     }
     else if (associatedProductsIds != null && associatedProductsIds != undefined) {
         return {
-            "advertisting-image": imageBase64hash,
-            "associated-product-ids": associatedProductsIds
+            'advertising-image': imageBase64hash,
+            'associated-product-ids': associatedProductsIds
         }
     } else {
-        return { "advertisting-image": imageBase64hash }
+        return {  'advertising-image': imageBase64hash }
     }
 }
 
