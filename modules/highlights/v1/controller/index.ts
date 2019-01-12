@@ -16,17 +16,17 @@ function advert(imageBase64hash: string, associatedCategoryId?: number,associate
     }
     if (associatedCategoryId != null && associatedCategoryId != undefined) {
         return {
-            'advertising-image' : imageBase64hash,
-            'category-id': associatedCategoryId
+            'advertising_image' : imageBase64hash,
+            'category_id': associatedCategoryId
         }
     }
     else if (associatedProductsIds != null && associatedProductsIds != undefined) {
         return {
-            'advertising-image': imageBase64hash,
-            'associated-product-ids': associatedProductsIds
+            'advertising_image': imageBase64hash,
+            'associated_product_ids': associatedProductsIds
         }
     } else {
-        return {  'advertising-image': imageBase64hash }
+        return {  'advertising_image': imageBase64hash }
     }
 }
 
