@@ -1,4 +1,14 @@
 {
+  "highlights": [
+    {
     "adervertisingImageName": "image1.png",
-    "associatedProductsIds": [1234, 123]
-  }
+    "associatedProductsIds": [],
+    "associatedCategoryId": 122
+    },
+    {
+      "adervertisingImageName": "test.jpg",
+      "associatedProductsIds": [123,12323,45],
+      "associatedCategoryId": 0
+    }
+  ]
+}
