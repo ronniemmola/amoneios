@@ -3,11 +3,11 @@
     {
     "adervertisingImageName": "image1.png",
     "associatedProductsIds": [],
-    "associatedCategoryId": 122
+    "associatedCategoryId": 253
     },
     {
       "adervertisingImageName": "test.jpg",
-      "associatedProductsIds": [123,12323,45],
+      "associatedProductsIds": [8087,3131, 3185,3085,3066,3128],
       "associatedCategoryId": 0
     }
   ]
