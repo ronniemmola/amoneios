@@ -1,12 +1,14 @@
 
 import * as express from "express";
 import * as highlightController from  '../controller';
+import { APIConstants } from  '../../../constants';
+
 var WooCommerceAPI = require('woocommerce-api');
 
 var wooCommerceeClient = new WooCommerceAPI({
-  url: 'https://test.amonet.co.za',
-  consumerKey: 'ck_0c105911cd1f51f1cb4a3002f86328443a80b090',
-  consumerSecret: 'cs_f7f7614f27d4ac015de3bc5bb346fa8c8c8f9228',
+  url: APIConstants.base_url,
+  consumerKey: APIConstants.customer_key,
+  consumerSecret: APIConstants.customer_secret,
   wpAPI: true,
   version: 'wc/v1'
 });
