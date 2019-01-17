@@ -1,6 +1,12 @@
 {
    "name": "January 2019",
-   "product_ids": [234,23432,3243,2343],
+   "product_ids": [
+      3154,
+      3105,
+      3131,
+      3085,
+      3117
+  ],
    "deal_color" : "#ff32453",
    "valid": true
 }
