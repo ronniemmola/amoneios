@@ -3,6 +3,7 @@ import * as promBundle from "express-prom-bundle";
 import * as bodyParser from "body-parser";
 import { HTTPCode } from "./modules/constants";
 import * as highlightPoductsRouter from './modules/highlights/v1/router';
+import * as dealsRouters from './modules/deals/v1/router';
 var path = require('path');
 
 class App {
@@ -37,6 +38,7 @@ class App {
 
 private mountRoutes(): void {
     this.app.use('/highlights', highlightPoductsRouter);
+    this.app.use('/deals', dealsRouters);
     this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
       const err = {
         message: 'Not Found',

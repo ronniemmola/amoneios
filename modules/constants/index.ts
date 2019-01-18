@@ -11,6 +11,12 @@ export enum HTTPCode {
     InternalError = 500
 }
 
+export enum APIConstants {
+     base_url = 'https://test.amonet.co.za',
+     customer_key = 'ck_0c105911cd1f51f1cb4a3002f86328443a80b090',
+     customer_secret = 'cs_f7f7614f27d4ac015de3bc5bb346fa8c8c8f9228'
+}
+
 export const aes128_encryptionKey = [ 91, 7, 119, 71, 3,  67, 79, 13, 109, 101, 97, 13, 29, 19, 91, 7 ];
 export const aes192_encryptionKey = [ 67, 1, 2, 29, 4, 13, 71, 7, 8, 13, 67, 67, 67, 13, 14, 101,
     101, 17, 71, 29, 19, 29, 19, 19 ];
