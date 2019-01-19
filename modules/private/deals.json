@@ -1,12 +1,7 @@
 {
-   "name": "January 2019",
-   "product_ids": [
-      3154,
-      3105,
-      3131,
-      3085,
-      3117
-  ],
-   "deal_color" : "#ff32453",
+   "name": "TURN 2019",
+   "category_id": 253,
+   "product_ids": [0],
+   "deal_color" : "#A932453",
    "valid": true
 }
