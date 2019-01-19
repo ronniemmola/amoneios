@@ -14,9 +14,10 @@ async function loadDeals() {
         }
        
         return {
-            "name": dealsResponse.name,
-            "product_ids": dealsResponse.product_ids,
-            "deal_color" : dealsResponse.deal_color
+            name: dealsResponse.name,
+            product_ids: dealsResponse.product_ids,
+            category_id: dealsResponse.category_id,
+            deal_color : dealsResponse.deal_color
          }
 
     } catch (error) {
