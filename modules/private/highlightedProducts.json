@@ -1,14 +1,19 @@
 {
   "highlights": [
     {
-    "adervertisingImageName": "image1.png",
+    "adervertisingImageName": "lALPAuoR5ucdoyTNAVDNAyA_800_336.png",
     "associatedProductsIds": [],
-    "associatedCategoryId": 253
+    "associatedCategoryId": 0
+    },
+	 {
+    "adervertisingImageName": "lALPBE1XX0DuPkvNAVDNAyA_800_336.png",
+    "associatedProductsIds": [],
+    "associatedCategoryId": 0
     },
     {
-      "adervertisingImageName": "test.jpg",
-      "associatedProductsIds": [8087,3131, 3185,3085,3066,3128],
-      "associatedCategoryId": 0
+    "adervertisingImageName": "lALPBE1XX0DuUczNAVDNAyA_800_336.png",
+    "associatedProductsIds": [],
+    "associatedCategoryId": 0
     }
   ]
 }
