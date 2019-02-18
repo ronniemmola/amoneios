@@ -3,18 +3,20 @@ import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
 import { encodeFileIntoBase64 } from '../../../core/ImageController';
 import { imageDirectory } from '../../../../app';
+import { randomString } from '../../../core/stringController';
 
-const dealsResponse = require('../../../private/deals.json');
+const dealsResponse = require('../../../private/files/json/deals.json');
 
 async function loadDeals() {
     try {
         const isValid = dealsResponse.isValid;
         if (isValid == null && isValid==false) {
-            return {};
+            return {}
         }
        
         return {
             name: dealsResponse.name,
+            dealId: randomString(4),
             product_ids: dealsResponse.product_ids,
             category_id: dealsResponse.category_id,
             deal_color : dealsResponse.deal_color
@@ -35,5 +37,4 @@ export const currentDeals = async (request: Request, response: Response) => {
     } catch (error) {
         response.status(HTTPCode.InternalError).json(error.message || "Internal error");
     }
-
 }

@@ -3,8 +3,7 @@ import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
 import { encodeFileIntoBase64 } from '../../../core/ImageController';
 import { imageDirectory } from '../../../../app';
 
-const highlightResponse = require('../../../private/highlightedProducts.json');
-const path = require('path');
+const highlightResponse = require('../../../private/files/json/highlightedProducts.json');
 
 const kAdvertisingImage = 'advertising-image';
 const kCategoryId = 'category-id';
