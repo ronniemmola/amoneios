@@ -5,7 +5,7 @@ import { encodeFileIntoBase64 } from '../../../core/ImageController';
 import { imageDirectory } from '../../../../app';
 import { randomString } from '../../../core/stringController';
 
-const dealsResponse = require('../../../private/deals.json');
+const dealsResponse = require('../../../private/files/json/deals.json');
 
 async function loadDeals() {
     try {
