@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
-import { fileDirectory } from '../../../private/files';
+import { fileDirectory } from '../../../../private/files';
 
 export class HtlmContentController {
 
