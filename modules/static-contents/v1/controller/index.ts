@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
 import { HtlmContentController } from './htmlContentController';
+import { imageDirectory } from '../../../../app';
+var fs = require('fs');
 
 enum StaticContent {
     termsAndConditions = "terms-and-conditions",
@@ -13,7 +15,8 @@ enum StaticContent {
 
 export class StaticContentController {    
     public constructor() { }
-    public postStaticContent(request: Request, response: Response){
+    public postHtlm(request: Request, response: Response){
+        console.log(request);
         try {
             const contentName = request.params.contentName;
             const htlmContentController = new HtlmContentController();
@@ -43,7 +46,7 @@ export class StaticContentController {
         }
     }
     
-    public loadStaticContent(request: Request, response: Response) {
+    public loadHtlm(request: Request, response: Response) {
        
         try {
             const contentName = request.params.contentName;
@@ -59,6 +62,20 @@ export class StaticContentController {
                     response.status(HTTPCode.NotFound).json({});
                     break;
             }
+        } catch (error) {
+            response.status(error.statusCode || 500).json(error.body || error.message);
+        }
+    }
+
+    public loadImage(request: Request, response: Response) {
+       console.log(request);
+        try {
+            const imageName = request.params.imageName;
+            const htlmContentController = new HtlmContentController();
+            const fileName = imageDirectory() + imageName;
+            var image = fs.readFileSync(fileName);
+            response.writeHead(200, {'Content-Type': 'image/gif' });
+            response.end(image, 'binary');
         } catch (error) {
             response.status(error.statusCode || 500).json(error.body || error.message);
         }

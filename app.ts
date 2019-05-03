@@ -3,7 +3,7 @@ import * as promBundle from "express-prom-bundle";
 import * as bodyParser from "body-parser";
 import { HTTPCode } from "./modules/constants";
 import * as highlightPoductsRouter from './modules/highlights/v1/router';
-import * as dealsRouters from './modules/deals/v1/router';
+import * as dealsRouter from './modules/deals/v1/router';
 import * as staticContentRouter from './modules/static-contents/v1/router';
 
 const path = require('path');
@@ -40,7 +40,8 @@ class App {
 
 private mountRoutes(): void {
     this.app.use('/highlights', highlightPoductsRouter);
-    this.app.use('/deals', dealsRouters);
+    this.app.use('/deals', dealsRouter);
+    this.app.use('/public/images', staticContentRouter);
     this.app.use('/static-contents', staticContentRouter);
     this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
       const err = {

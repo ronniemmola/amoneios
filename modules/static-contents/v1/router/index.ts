@@ -6,6 +6,8 @@ const staticContentController = new StaticContentController();
 const router = express.Router();
 
 
-router.post("/v1/html/:contentName/", staticContentController.postStaticContent);
-router.get("/v1/html/:contentName/", staticContentController.loadStaticContent);
+router.post("/v1/html/:contentName/", staticContentController.postHtlm);
+router.get("/v1/html/:contentName/", staticContentController.loadHtlm);
+router.get("/v1/image/:imageName/", staticContentController.loadImage);
+
 export = router;
