@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3pro.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
+<style style="background-color: hex(EFEFF4)">
 img {
   display: block;
   margin-left: auto;
@@ -11,20 +11,20 @@ img {
 }
 </style>
 <div class="w3-container">
-        <h1>Payment for ${order-number} has been cancelled.</h1>
+        <h3>Payment for <span style="font-weight:bold">{order-number}</span> has been cancelled.</h3>
         <div class="w3-cell" style="width:30%">
         <img src="/static-contents/v1/image/payment-cancelled.png" style="width:100%"> <div>
         </div>
         </div>
 </head>
+
 <body>
 </div>
-<div> <h4>You order has {order-number} is still valid but you have the current payment. You can proceed to the payment when you are ready.</h4></div>
-
+<div> <p style="margin-left: 40px"><h5>You order <span style="font-weight:bold">{order-number}</span> is still valid but its payment has been cancelled. You can proceed to the payment when you are ready.</p></h5></div>
 <body>
+
+<div> <h5>The details of this order can be found in your <span style="font-weight:bold">account profile</span>.</h5></div>
+
 <footer> <img src="/static-contents/v1/image/amonet-logo.png" style="width:100%"> <div></div></footer>
-<div> <h4>The details of this order can be found in your account profile.</h4></div>
-
-
 </body>
 </html>
