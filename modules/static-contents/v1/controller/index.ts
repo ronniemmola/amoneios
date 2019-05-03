@@ -13,19 +13,11 @@ enum StaticContent {
 
 export class StaticContentController {    
     public constructor() { }
-
-    public loadStaticContent(request: Request, response: Response) {
-       
+    public postStaticContent(request: Request, response: Response){
         try {
             const contentName = request.params.contentName;
             const htlmContentController = new HtlmContentController();
             switch (contentName) {
-                case StaticContent.termsAndConditions:
-                    return htlmContentController.loadTermsAndConditions(response);
-                case StaticContent.aboutUs:
-                    return htlmContentController.loadAboutUs(response);
-                case StaticContent.contactUs:
-                    return htlmContentController.loadContactUs(response);
                 case StaticContent.paymentSuccess, StaticContent.paymentFailure, StaticContent.paymentCancel:
                     const collectionQuery = request.query.collecting;
                     if (!collectionQuery || collectionQuery==null) {
@@ -42,6 +34,27 @@ export class StaticContentController {
                         return htlmContentController.loadPaymentCancelled(response,collecting);
                     }
                     return;
+                default:
+                    response.status(HTTPCode.NotFound).json({});
+                    break;
+            }
+        } catch (error) {
+            response.status(error.statusCode || 500).json(error.body || error.message);
+        }
+    }
+    
+    public loadStaticContent(request: Request, response: Response) {
+       
+        try {
+            const contentName = request.params.contentName;
+            const htlmContentController = new HtlmContentController();
+            switch (contentName) {
+                case StaticContent.termsAndConditions:
+                    return htlmContentController.loadTermsAndConditions(response);
+                case StaticContent.aboutUs:
+                    return htlmContentController.loadAboutUs(response);
+                case StaticContent.contactUs:
+                    return htlmContentController.loadContactUs(response);
                 default:
                     response.status(HTTPCode.NotFound).json({});
                     break;
