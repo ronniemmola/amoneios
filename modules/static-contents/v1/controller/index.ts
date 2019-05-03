@@ -8,7 +8,7 @@ enum StaticContent {
     contactUs = "contact-us",
     paymentSuccess = "payment-success",
     paymentFailure = "payment-failure",
-    paymentCancel = "payment-success",
+    paymentCancel = "payment-cancel",
 }
 
 export class StaticContentController {    
