@@ -10,25 +10,26 @@ enum StaticContent {
     contactUs = "contact-us",
     paymentSuccess = "payment-success",
     paymentFailure = "payment-failure",
-    paymentCancel = "payment-cancel",
+    paymentCancel  = "payment-cancel",
 }
 
 export class StaticContentController {    
     public constructor() { }
     public postHtlm(request: Request, response: Response){
-        console.log(request);
+       
         try {
             const contentName = request.params.contentName;
             const htlmContentController = new HtlmContentController();
             switch (contentName) {
-                case StaticContent.paymentSuccess, StaticContent.paymentFailure, StaticContent.paymentCancel:
+                case StaticContent.paymentSuccess:
+                case StaticContent.paymentFailure:
+                case StaticContent.paymentCancel:
                     const collectionQuery = request.query.collecting;
                     if (!collectionQuery || collectionQuery==null) {
-                        response.status(HTTPCode.BadRequest).json("Missing collecting query parameter value");
-                        return;
+                        return response.status(HTTPCode.BadRequest).json("Missing collecting query parameter value");
                     }
                     const collecting: Boolean = JSON.parse(collectionQuery);
-                   
+                    
                     if (contentName==StaticContent.paymentSuccess) {
                         return htlmContentController.loadPaymentSuccess(response,collecting);
                     } else if(contentName==StaticContent.paymentFailure) {
@@ -36,9 +37,8 @@ export class StaticContentController {
                     } else if(contentName==StaticContent.paymentCancel) {
                         return htlmContentController.loadPaymentCancelled(response,collecting);
                     }
-                    return;
                 default:
-                    response.status(HTTPCode.NotFound).json({});
+                    response.status(HTTPCode.NotFound).json("The content for " + contentName + " was not found");
                     break;
             }
         } catch (error) {
