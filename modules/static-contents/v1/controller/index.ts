@@ -16,7 +16,7 @@ enum StaticContent {
 export class StaticContentController {    
     public constructor() { }
     public postHtlm(request: Request, response: Response){
-       
+        
         try {
             const contentName = request.params.contentName;
             const htlmContentController = new HtlmContentController();
@@ -31,7 +31,11 @@ export class StaticContentController {
                     const collecting: Boolean = JSON.parse(collectionQuery);
                     
                     if (contentName==StaticContent.paymentSuccess) {
-                        return htlmContentController.loadPaymentSuccess(response,collecting);
+                        const amount = request.body.Amount;
+                        const siteCode = request.body.SiteCode;
+                        const transactionReference = request.body.TransactionReference;
+                       
+                        return htlmContentController.loadPaymentSuccess(response,collecting,amount,transactionReference,siteCode );
                     } else if(contentName==StaticContent.paymentFailure) {
                         return htlmContentController.loadPaymentFailure(response,collecting);
                     } else if(contentName==StaticContent.paymentCancel) {
@@ -68,7 +72,7 @@ export class StaticContentController {
     }
 
     public loadImage(request: Request, response: Response) {
-       console.log(request);
+      
         try {
             const imageName = request.params.imageName;
             const htlmContentController = new HtlmContentController();

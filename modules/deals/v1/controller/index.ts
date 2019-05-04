@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
 import { encodeFileIntoBase64 } from '../../../core/ImageController';

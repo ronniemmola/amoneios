@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="background-color: hex(EFEFF4)">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3pro.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,22 +11,43 @@ img {
   margin-right: auto;
 }
 div.a {
-  margin: 10px;
+  margin: 8px;
   text-indent: 24px;
 }
 </style>
-<div class="w3-container">
-        <br><h4>You payment for your order <span style="font-weight:bold">{order-number}</span> has completed and we are busy is processing.</h4></br>
-        <br><h4>We will notify you when it is ready for collection at our <a href="http://maps.apple.com/?daddr=-25.9930201,28.1254762&dirflg=d&t=m">offices</a> .</h4></br>
-        <div class="w3-cell" style="width:30%"> <img src="/static-contents/v1/image/payment-cancelled.png" style="width:100%"> </div>
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-<div class="a"> <p><h5>Continue shopping with us for many more products of quality at the best price.</h5></p></div>
-<body>
-
-<div> <h5>The details of this order can be found in your <span style="font-weight:bold">account profile</span>.</h5></div>
-
-<footer> <img src="/static-contents/v1/image/amonet-logo.png" style="width:50%"> <div></div></footer>
-</body>
+  <div class="container">
+      <div class="jumbotron">
+        <h1><strong>Confirmation</strong></h1>
+      </div>
+  </div>
+    <div class="w3-container">
+          <h4>
+            The payment of <span style="font-weight:bold">R {amount}</span> for your order with number <span style="font-weight:bold">{order-number}</span> to <span style="font-weight:bold">{site}</span> has completed and we are busy processing it.
+          </h4>
+          <h4>Thank you for shopping with <span style="font-weight:bold">Amonet</span>. We will notify you when it is ready for collection at our <a href="http://maps.apple.com/?daddr=-25.9930201,28.1254762&dirflg=d&t=m">offices</a>.</h4>
+          
+        <div class="w3-cell" style="width:30%"> <img src="/static-contents/v1/image/payment-succeeded.png" style="width:75%"> </div>
+    </div>
+    <div class="w3-container">
+      <h4>Continue shopping with us for many more products of quality at the best price.</h4>
+    </div>
+    <div class="w3-container">
+      <h4>The details of this order can be found in your <span style="font-weight:bold">account profile</span>.</h4>
+    </div>
+     </br>
+    <footer> <img src="/static-contents/v1/image/amonet-logo.png" style="width:50%"></footer>
+     </br>
+   
+  </body>
 </html>
