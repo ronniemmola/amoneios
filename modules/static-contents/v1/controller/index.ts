@@ -62,11 +62,11 @@ export class StaticContentController {
                     return htlmContentController.loadAboutUs(response);
                 case StaticContent.contactUs:
                     return htlmContentController.loadContactUs(response);
-                case StaticContent.paymentSuccess:
-                case StaticContent.paymentFailure:
+
                 case StaticContent.paymentCancel:
-                    this.postHtlm(request, response);
-                    return;
+                    const collectionQuery = request.query.collecting;
+                    const collecting: Boolean = JSON.parse(collectionQuery);
+                    return htlmContentController.loadPaymentCancelled(response,collecting);
                 default:
                     response.status(HTTPCode.NotFound).json({});
                     break;
