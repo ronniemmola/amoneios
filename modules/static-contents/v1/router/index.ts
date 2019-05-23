@@ -1,13 +1,11 @@
 import * as express from 'express';
 import { APIConstants } from  '../../../constants';
-import { StaticContentController } from '../controller';
+import * as staticContentController  from '../controller';
 
-const staticContentController = new StaticContentController();
-const router = express.Router();
+const staticContentRouter = express.Router();
+export = staticContentRouter;
 
-
-router.post("/v1/html/:contentName/", staticContentController.postHtlm);
-router.get("/v1/html/:contentName/", staticContentController.loadHtlm);
-router.get("/v1/image/:imageName/", staticContentController.loadImage);
-
-export = router;
+staticContentRouter.get("/v1/video/:videoName/", staticContentController.loadVideo);
+staticContentRouter.post("/v1/html/:contentName/", staticContentController.postHtlm);
+staticContentRouter.get("/v1/html/:contentName/", staticContentController.loadHtlm);
+staticContentRouter.get("/v1/image/:imageName/", staticContentController.loadImage);

@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
-import { fileDirectory } from '../../../../private/files';
+import { fileDirectory } from '../resources/pathProvider';
 var fs = require('fs');
 
 export class HtlmContentController {
@@ -28,6 +28,15 @@ export class HtlmContentController {
         try {
             response.status(200).header({ "Content-Type": "text/html" });
             response.sendFile(fileDirectory + '/html/contactUs.html');
+        } catch (error) {
+            response.status(500).json(error.body || error.message);
+        }
+    }
+
+    public async loadReturnPolicy(response: Response) {
+        try {
+            response.status(200).header({ "Content-Type": "text/html" });
+            response.sendFile(fileDirectory + '/html/returnPolicy.html');
         } catch (error) {
             response.status(500).json(error.body || error.message);
         }

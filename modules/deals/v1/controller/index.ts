@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
 import { encodeFileIntoBase64 } from '../../../core/ImageController';
-import { imageDirectory } from '../../../../app';
+import { imageDirectory } from '../../../static-contents/v1/resources/pathProvider';
 import { randomString } from '../../../core/stringController';
 
 const dealsResponse = require('../../../../private/files/json/deals.json');

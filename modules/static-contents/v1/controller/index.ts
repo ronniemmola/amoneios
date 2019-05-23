@@ -1,25 +1,26 @@
 import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
 import { HtlmContentController } from './htmlContentController';
-import { imageDirectory } from '../../../../app';
+import { imageDirectory, videoDirectory } from '../resources/pathProvider';
+import { VideoContentController } from './videoContentController';
 var fs = require('fs');
 
 enum StaticContent {
     termsAndConditions = "terms-and-conditions",
     aboutUs = "about-us",
     contactUs = "contact-us",
+    returnPolicy = "return-policy",
+    howToBuy = "how-to-buy",
     paymentSuccess = "payment-success",
     paymentFailure = "payment-failure",
-    paymentCancel  = "payment-cancel",
+    paymentCancel  = "payment-cancel"
 }
 
-export class StaticContentController {    
-    public constructor() { }
-    public postHtlm(request: Request, response: Response){
-        
+ export function postHtlm(request: Request, response: Response) {
         try {
             const contentName = request.params.contentName;
             const htlmContentController = new HtlmContentController();
+
             switch (contentName) {
                 case StaticContent.paymentSuccess:
                 case StaticContent.paymentFailure:
@@ -48,10 +49,9 @@ export class StaticContentController {
         } catch (error) {
             response.status(error.statusCode || 500).json(error.body || error.message);
         }
-    }
+}
     
-    public loadHtlm(request: Request, response: Response) {
-       
+export function loadHtlm(request: Request, response: Response) {
         try {
             const contentName = request.params.contentName;
             const htlmContentController = new HtlmContentController();
@@ -62,7 +62,8 @@ export class StaticContentController {
                     return htlmContentController.loadAboutUs(response);
                 case StaticContent.contactUs:
                     return htlmContentController.loadContactUs(response);
-
+                case StaticContent.returnPolicy:
+                    return htlmContentController.loadReturnPolicy(response);
                 case StaticContent.paymentCancel:
                     const collectionQuery = request.query.collecting;
                     const collecting: Boolean = JSON.parse(collectionQuery);
@@ -76,17 +77,25 @@ export class StaticContentController {
         }
     }
 
-    public loadImage(request: Request, response: Response) {
-      
+    export function loadImage(request: Request, response: Response) {
         try {
             const imageName = request.params.imageName;
-            const htlmContentController = new HtlmContentController();
             const fileName = imageDirectory() + imageName;
             var image = fs.readFileSync(fileName);
-            response.writeHead(200, {'Content-Type': 'image/gif' });
+            response.writeHead(200, {'Content-Type': 'image/gif'});
             response.end(image, 'binary');
         } catch (error) {
             response.status(error.statusCode || 500).json(error.body || error.message);
         }
     }
-}
+
+    export function loadVideo(request: Request, response: Response) {
+        const videoContentController = new VideoContentController();
+        try {
+            const videoName = request.params.videoName;
+            return videoContentController.loadVideo(videoName,response);
+        } catch (error) {
+            response.status(error.statusCode || 500).json(error.body || error.message);
+        }
+    }
+    
