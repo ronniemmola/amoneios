@@ -1,11 +1,12 @@
 import * as express from "express";
 import * as promBundle from "express-prom-bundle";
 import * as bodyParser from "body-parser";
-import { HTTPCode } from "./modules/constants";
-import { ErrorItem, CommonError } from './modules/shared/models/error';
 import * as highlightPoductsRouter from './modules/highlights/v1/router';
 import * as dealsRouter from './modules/deals/v1/router';
 import * as staticContentRouter from './modules/static-contents/v1/router';
+
+import { HTTPCode } from "./modules/constants";
+import { ErrorItem, CommonError } from './modules/shared/models/error';
 
 class App {
   public app;
@@ -42,7 +43,7 @@ private mountRoutes(): void {
     this.app.use('/deals', dealsRouter);
     this.app.use('/public/images', staticContentRouter);
     this.app.use('/static-contents', staticContentRouter);
-    
+
     this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
       const err = {
         message: 'Not Found',

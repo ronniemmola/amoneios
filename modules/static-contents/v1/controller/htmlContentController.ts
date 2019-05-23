@@ -1,57 +1,72 @@
 
 import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
-import { fileDirectory } from '../resources/pathProvider';
+import { htmlDirectory } from '../resources/pathProvider';
 var fs = require('fs');
 
-export class HtlmContentController {
+enum HTMLName {
+    termsAndConditions = "terms-and-conditions",
+    aboutUs = "about-us",
+    contactUs = "contact-us",
+    returnPolicy = "return-policy",
+    howToBuy = "how-to-buy",
+    paymentSuccess = "payment-success",
+    paymentFailure = "payment-failure",
+    paymentCancel = "payment-cancel"
+}
 
-    public async loadTermsAndConditions(response: Response) {
-        try {
-            response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(fileDirectory + '/html/termsAndConditions.html');
-        } catch (error) {
-            response.status(500).json(error.body || error.message);
-        }
+export function loadHtml(htmlName: String, isPost: Boolean, response: Response, isCollecting?: Boolean) {
+    const htlmContentController = new HtlmContentController();
+
+    if (isPost==true && htlmContentController.allowedPostFor(htmlName)==false) {
+        response.status(HTTPCode.NotFound).json("The content for " + htmlName + " was not found or does not support post");
+         return
     }
 
-    public async loadAboutUs(response: Response) {
-        try {
-            response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(fileDirectory + '/html/aboutUs.html');
-        } catch (error) {
-            response.status(500).json(error.body || error.message);
-        }
-    }
-
-    public async loadContactUs(response: Response) {
-        try {
-            response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(fileDirectory + '/html/contactUs.html');
-        } catch (error) {
-            response.status(500).json(error.body || error.message);
-        }
-    }
-
-    public async loadReturnPolicy(response: Response) {
-        try {
-            response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(fileDirectory + '/html/returnPolicy.html');
-        } catch (error) {
-            response.status(500).json(error.body || error.message);
-        }
-    }
-
-    public async loadPaymentSuccess(response: Response, collecting: Boolean, amount: Number, transactionId: Number, siteName: String) {
-        try {
-          
-            var fileName: String;
-            if (collecting==false) {
-                fileName = fileDirectory + '/html/paymentSuccessDelivering.html';
-            } else {
-                fileName = fileDirectory + '/html/paymentSuccessCollecting.html';
+    switch (htmlName) {
+        case HTMLName.termsAndConditions:
+        case HTMLName.aboutUs:
+        case HTMLName.contactUs:
+        case HTMLName.returnPolicy:
+            return htlmContentController.loadContent(htmlName, response);
+        case HTMLName.paymentCancel:
+            if (isCollecting) {
+                return htlmContentController.loadPaymentCancelled(htmlName, response, isCollecting);
             }
-            fs.readFile(fileName, 'utf8', function(err, html){
+            return response.status(HTTPCode.BadRequest).json(" Missing collection flag");
+        default:
+            return response.status(HTTPCode.NotFound).json({});
+    }
+}
+
+class HtlmContentController {
+    postAllowedPath: Array<String> = [HTMLName.paymentSuccess,HTMLName.paymentFailure,HTMLName.paymentCancel];
+
+    public allowedPostFor(htmlPage: String): Boolean {
+       return this.postAllowedPath.indexOf(htmlPage) >= 0
+    }
+
+    public async loadContent(htmlName: String, response: Response) {
+        const fileName = htmlDirectory() + htmlName + '.html'
+        try {
+            response.status(200).header({ "Content-Type": "text/html" });
+            response.sendFile(fileName);
+        } catch (error) {
+            response.status(500).json(error.body || error.message);
+        }
+        return;
+    }
+
+    public async loadPaymentSuccess(htmlName: String, response: Response, collecting: Boolean, amount: Number, transactionId: Number, siteName: String) {
+        try {
+
+            var fileName: String;
+            if (collecting == false) {
+                fileName = htmlDirectory + '/html/paymentSuccessDelivering.html';
+            } else {
+                fileName = htmlDirectory + '/html/paymentSuccessCollecting.html';
+            }
+            fs.readFile(fileName, 'utf8', function (err, html) {
                 var orderNumberRegex = '{order-number}';
                 var amountRegex = '{amount}';
                 var siteRegex = '{site}';
@@ -59,26 +74,26 @@ export class HtlmContentController {
                 response.status(200).header({ "Content-Type": "text/html" });
                 response.end(ammendedURL);
             });
-            
+
         } catch (error) {
             response.status(500).json(error.body || error.message);
         }
     }
 
-    public async loadPaymentFailure(response: Response,  collecting: Boolean) {
+    public async loadPaymentFailure(htmlName: String, response: Response, collecting: Boolean) {
         try {
             response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(fileDirectory + '/html/paymentFailure.html');
+            response.sendFile(htmlDirectory + '/html/paymentFailure.html');
         } catch (error) {
             response.status(500).json(error.body || error.message);
         }
     }
 
 
-    public async loadPaymentCancelled(response: Response,  collecting: Boolean) {
+    public async loadPaymentCancelled(htmlName: String, response: Response, collecting: Boolean) {
         try {
             response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(fileDirectory + '/html/paymentCancel.html');
+            response.sendFile(htmlDirectory + '/html/paymentCancel.html');
         } catch (error) {
             response.status(500).json(error.body || error.message);
         }

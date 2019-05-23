@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
-import { videoDirectory, fileDirectory } from '../resources/pathProvider';
+import { videoDirectory } from '../resources/pathProvider';
 
 var fs = require('fs');
 
