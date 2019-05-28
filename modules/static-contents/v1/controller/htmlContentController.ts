@@ -15,12 +15,12 @@ enum HTMLName {
     paymentCancel = "payment-cancel"
 }
 
-export function loadHtml(htmlName: String, isPost: Boolean, response: Response, isCollecting?: Boolean) {
+export function loadHtml(htmlName: String, isPost: Boolean, response: Response, isCollecting?: Boolean, amount?: Number, transactionId?: String, siteName?: String) {
     const htlmContentController = new HtlmContentController();
 
     if (isPost==true && htlmContentController.allowedPostFor(htmlName)==false) {
         response.status(HTTPCode.NotFound).json("The content for " + htmlName + " was not found or does not support post");
-         return
+        return
     }
 
     switch (htmlName) {
@@ -30,10 +30,9 @@ export function loadHtml(htmlName: String, isPost: Boolean, response: Response, 
         case HTMLName.returnPolicy:
             return htlmContentController.loadContent(htmlName, response);
         case HTMLName.paymentCancel:
-            if (isCollecting) {
-                return htlmContentController.loadPaymentCancelled(htmlName, response, isCollecting);
-            }
-            return response.status(HTTPCode.BadRequest).json(" Missing collection flag");
+            return htlmContentController.loadPaymentCancelled(htmlName, response);
+        case HTMLName.paymentSuccess:
+            return htlmContentController.loadPaymentSuccess(response,isCollecting,amount, transactionId,siteName);
         default:
             return response.status(HTTPCode.NotFound).json({});
     }
@@ -57,14 +56,14 @@ class HtlmContentController {
         return;
     }
 
-    public async loadPaymentSuccess(htmlName: String, response: Response, collecting: Boolean, amount: Number, transactionId: Number, siteName: String) {
+    public async loadPaymentSuccess(response: Response, collecting: Boolean, amount: Number, transactionId: String, siteName: String) {
         try {
 
             var fileName: String;
-            if (collecting == false) {
-                fileName = htmlDirectory + '/html/paymentSuccessDelivering.html';
+            if (collecting == true) {
+                fileName = htmlDirectory + '/html/payment-success-collecting.html';
             } else {
-                fileName = htmlDirectory + '/html/paymentSuccessCollecting.html';
+                fileName = htmlDirectory + '/html/payment-success-delivering.html';
             }
             fs.readFile(fileName, 'utf8', function (err, html) {
                 var orderNumberRegex = '{order-number}';
@@ -80,20 +79,20 @@ class HtlmContentController {
         }
     }
 
-    public async loadPaymentFailure(htmlName: String, response: Response, collecting: Boolean) {
+    public async loadPaymentFailure(htmlName: String, response: Response) {
         try {
             response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(htmlDirectory + '/html/paymentFailure.html');
+            response.sendFile(htmlDirectory + '/html/payment-failure.html');
         } catch (error) {
             response.status(500).json(error.body || error.message);
         }
     }
 
 
-    public async loadPaymentCancelled(htmlName: String, response: Response, collecting: Boolean) {
+    public async loadPaymentCancelled(htmlName: String, response: Response) {
         try {
             response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(htmlDirectory + '/html/paymentCancel.html');
+            response.sendFile(htmlDirectory + '/html/payment-cancel.html');
         } catch (error) {
             response.status(500).json(error.body || error.message);
         }
