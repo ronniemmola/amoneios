@@ -36,9 +36,11 @@ export function loadVideo(request: Request, response: Response) {
 }
 
 function loadHtlm(request: Request, isPost: Boolean, response: Response) {
+    
     try {
         const contentName = request.params.contentName;
         const collectionQuery = request.query.collecting;
+        console.log(contentName);
         if (!collectionQuery || collectionQuery == null) {
             return htlmContentController.loadHtml(contentName, isPost,response);
         }

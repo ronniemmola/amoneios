@@ -22,7 +22,7 @@ export function loadHtml(htmlName: String, isPost: Boolean, response: Response, 
         response.status(HTTPCode.NotFound).json("The content for " + htmlName + " was not found or does not support post");
         return
     }
-
+console.log("Reaching");
     switch (htmlName) {
         case HTMLName.termsAndConditions:
         case HTMLName.aboutUs:
@@ -47,6 +47,7 @@ class HtlmContentController {
 
     public async loadContent(htmlName: String, response: Response) {
         const fileName = htmlDirectory() + htmlName + '.html'
+        console.log(fileName);
         try {
             response.status(200).header({ "Content-Type": "text/html" });
             response.sendFile(fileName);
@@ -80,9 +81,12 @@ class HtlmContentController {
     }
 
     public async loadPaymentFailure(htmlName: String, response: Response) {
+        
+        const fileName = htmlDirectory() + htmlName + '.html'
+        console.log(fileName);
         try {
             response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(htmlDirectory + '/html/payment-failure.html');
+            response.sendFile(fileName);
         } catch (error) {
             response.status(500).json(error.body || error.message);
         }
@@ -90,9 +94,11 @@ class HtlmContentController {
 
 
     public async loadPaymentCancelled(htmlName: String, response: Response) {
+        const fileName = htmlDirectory() + htmlName + '.html'
+        console.log(fileName);
         try {
             response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(htmlDirectory + '/html/payment-cancel.html');
+            response.sendFile(fileName);
         } catch (error) {
             response.status(500).json(error.body || error.message);
         }
