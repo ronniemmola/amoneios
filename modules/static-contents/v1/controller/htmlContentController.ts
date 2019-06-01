@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { HTTPCode, HTTPBodyKey } from '../../../constants/index';
 import { htmlDirectory } from '../resources/pathProvider';
+import { Observable } from 'rxjs/Observable';
 var fs = require('fs');
 
 enum HTMLName {
@@ -15,14 +16,15 @@ enum HTMLName {
     paymentCancel = "payment-cancel"
 }
 
-export function loadHtml(htmlName: String, isPost: Boolean, response: Response, isCollecting?: Boolean, amount?: Number, transactionId?: String, siteName?: String) {
+export function loadHtml(htmlName: String, isPost: Boolean, response: Response, amount: Number, transactionId: String, siteName: String, isCollecting?: Boolean) {
+
     const htlmContentController = new HtlmContentController();
 
-    if (isPost==true && htlmContentController.allowedPostFor(htmlName)==false) {
+    if (isPost == true && htlmContentController.allowedPostFor(htmlName) == false) {
         response.status(HTTPCode.NotFound).json("The content for " + htmlName + " was not found or does not support post");
         return
     }
-console.log("Reaching");
+    console.log("Reaching");
     switch (htmlName) {
         case HTMLName.termsAndConditions:
         case HTMLName.aboutUs:
@@ -30,19 +32,21 @@ console.log("Reaching");
         case HTMLName.returnPolicy:
             return htlmContentController.loadContent(htmlName, response);
         case HTMLName.paymentCancel:
-            return htlmContentController.loadPaymentCancelled(htmlName, response);
+            return htlmContentController.loadPaymentCancelled(htmlName, amount, transactionId, siteName, response);
         case HTMLName.paymentSuccess:
-            return htlmContentController.loadPaymentSuccess(response,isCollecting,amount, transactionId,siteName);
+            return htlmContentController.loadPaymentSuccess(htmlName, isCollecting, amount, transactionId, siteName, response);
+         case HTMLName.paymentFailure:
+            return htlmContentController.loadPaymentFailure(htmlName,amount, transactionId, siteName, response);
         default:
             return response.status(HTTPCode.NotFound).json({});
     }
 }
 
 class HtlmContentController {
-    postAllowedPath: Array<String> = [HTMLName.paymentSuccess,HTMLName.paymentFailure,HTMLName.paymentCancel];
+    postAllowedPath: Array<String> = [HTMLName.paymentSuccess, HTMLName.paymentFailure, HTMLName.paymentCancel];
 
     public allowedPostFor(htmlPage: String): Boolean {
-       return this.postAllowedPath.indexOf(htmlPage) >= 0
+        return this.postAllowedPath.indexOf(htmlPage) >= 0
     }
 
     public async loadContent(htmlName: String, response: Response) {
@@ -57,51 +61,68 @@ class HtlmContentController {
         return;
     }
 
-    public async loadPaymentSuccess(response: Response, collecting: Boolean, amount: Number, transactionId: String, siteName: String) {
+    public async loadPaymentSuccess(htmlName: String, collecting: Boolean, amount: Number, transactionId: String, siteName: String,response: Response,) {
         try {
 
-            var fileName: String;
+            var fileName = htmlDirectory() + htmlName;
             if (collecting == true) {
-                fileName = htmlDirectory + '/html/payment-success-collecting.html';
+                fileName += '-collecting.html';
             } else {
-                fileName = htmlDirectory + '/html/payment-success-delivering.html';
+                fileName += '-delivering.html';
             }
-            fs.readFile(fileName, 'utf8', function (err, html) {
-                var orderNumberRegex = '{order-number}';
-                var amountRegex = '{amount}';
-                var siteRegex = '{site}';
-                const ammendedURL = html.replace(orderNumberRegex, transactionId).replace(amountRegex, amount).replace(siteRegex, siteName);
-                response.status(200).header({ "Content-Type": "text/html" });
-                response.end(ammendedURL);
+            this.getAmmendedHTML(fileName, amount, transactionId, siteName, response);
+        } catch (error) {
+            response.status(500).json(error.body || error.message);
+        }
+    }
+
+    public async loadPaymentFailure(htmlName: String, amount: Number, transactionId: String, siteName: String, response: Response) {
+        const fileName = htmlDirectory() + htmlName + '.html'
+        console.log(fileName);
+        try {
+            this.getAmmendedHTML(fileName, amount, transactionId, siteName, response);
+        } catch (error) {
+            response.status(500).json(error.body || error.message);
+        }
+    }
+
+
+    public async loadPaymentCancelled(htmlName: String, amount: Number, transactionId: String, siteName: String, response: Response) {
+        const fileName = htmlDirectory() + htmlName + '.html'
+        console.log(fileName);
+        try {
+             this.getAmmendedHTML(fileName, amount, transactionId, siteName, response);
+
+        } catch (error) {
+            response.status(500).json(error.body || error.message);
+        }
+
+    }
+
+    async getAmmendedHTML(fileName: String, amount: Number, transactionId: String, siteName: String, response: Response): Promise<any> {
+
+        try {
+            const ammendedURL = await new Promise(async (resolve, reject) => {
+                fs.readFile(fileName, 'utf8', function (err, html) {
+                    if (err) {
+                        return resolve(null)
+                    }
+                    var orderNumberRegex = /{order-number}/g;
+                    var amountRegex = /{amount}/g;
+                    var siteRegex = /{site}/g;
+                    const ammendedURL = html.replace(orderNumberRegex, transactionId).replace(amountRegex, amount).replace(siteRegex, siteName);
+                    return resolve(ammendedURL);
+                })
             });
-
-        } catch (error) {
-            response.status(500).json(error.body || error.message);
-        }
-    }
-
-    public async loadPaymentFailure(htmlName: String, response: Response) {
-        
-        const fileName = htmlDirectory() + htmlName + '.html'
-        console.log(fileName);
-        try {
+         
+            if (ammendedURL==null){
+            return  response.status(500).json("File name is invalid");
+            }
             response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(fileName);
+            response.end(ammendedURL);
+       
         } catch (error) {
-            response.status(500).json(error.body || error.message);
+            return null
         }
     }
-
-
-    public async loadPaymentCancelled(htmlName: String, response: Response) {
-        const fileName = htmlDirectory() + htmlName + '.html'
-        console.log(fileName);
-        try {
-            response.status(200).header({ "Content-Type": "text/html" });
-            response.sendFile(fileName);
-        } catch (error) {
-            response.status(500).json(error.body || error.message);
-        }
-    }
-
 }

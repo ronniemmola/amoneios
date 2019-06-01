@@ -40,12 +40,16 @@ function loadHtlm(request: Request, isPost: Boolean, response: Response) {
     try {
         const contentName = request.params.contentName;
         const collectionQuery = request.query.collecting;
+        const site = request.params.site;
+        const amount = request.query.amount;
+        const ordernumber = request.query.ordernumber;
+        
         console.log(contentName);
         if (!collectionQuery || collectionQuery == null) {
-            return htlmContentController.loadHtml(contentName, isPost,response);
+            return htlmContentController.loadHtml(contentName, isPost,response,amount,ordernumber,site);
         }
         const collecting: Boolean = JSON.parse(collectionQuery);
-        return htlmContentController.loadHtml(contentName, isPost, response, collecting);
+        return htlmContentController.loadHtml(contentName, isPost,response,amount,ordernumber,site,collecting);
     } catch (error) {
         response.status(error.statusCode || 500).json(error.body || error.message);
     }
