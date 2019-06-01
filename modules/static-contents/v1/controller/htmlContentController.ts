@@ -24,7 +24,6 @@ export function loadHtml(htmlName: String, isPost: Boolean, response: Response, 
         response.status(HTTPCode.NotFound).json("The content for " + htmlName + " was not found or does not support post");
         return
     }
-    console.log("Reaching");
     switch (htmlName) {
         case HTMLName.termsAndConditions:
         case HTMLName.aboutUs:
@@ -38,7 +37,7 @@ export function loadHtml(htmlName: String, isPost: Boolean, response: Response, 
          case HTMLName.paymentFailure:
             return htlmContentController.loadPaymentFailure(htmlName,amount, transactionId, siteName, response);
         default:
-            return response.status(HTTPCode.NotFound).json({});
+            return response.status(HTTPCode.NotFound).json("Failed to find the requested page:" + htmlName);
     }
 }
 
@@ -46,12 +45,11 @@ class HtlmContentController {
     postAllowedPath: Array<String> = [HTMLName.paymentSuccess, HTMLName.paymentFailure, HTMLName.paymentCancel];
 
     public allowedPostFor(htmlPage: String): Boolean {
-        return this.postAllowedPath.indexOf(htmlPage) >= 0
+        return this.postAllowedPath.indexOf(htmlPage) >= -1
     }
 
     public async loadContent(htmlName: String, response: Response) {
         const fileName = htmlDirectory() + htmlName + '.html'
-        console.log(fileName);
         try {
             response.status(200).header({ "Content-Type": "text/html" });
             response.sendFile(fileName);
@@ -63,7 +61,6 @@ class HtlmContentController {
 
     public async loadPaymentSuccess(htmlName: String, collecting: Boolean, amount: Number, transactionId: String, siteName: String,response: Response,) {
         try {
-
             var fileName = htmlDirectory() + htmlName;
             if (collecting == true) {
                 fileName += '-collecting.html';
@@ -78,7 +75,6 @@ class HtlmContentController {
 
     public async loadPaymentFailure(htmlName: String, amount: Number, transactionId: String, siteName: String, response: Response) {
         const fileName = htmlDirectory() + htmlName + '.html'
-        console.log(fileName);
         try {
             this.getAmmendedHTML(fileName, amount, transactionId, siteName, response);
         } catch (error) {
@@ -89,7 +85,6 @@ class HtlmContentController {
 
     public async loadPaymentCancelled(htmlName: String, amount: Number, transactionId: String, siteName: String, response: Response) {
         const fileName = htmlDirectory() + htmlName + '.html'
-        console.log(fileName);
         try {
              this.getAmmendedHTML(fileName, amount, transactionId, siteName, response);
 
@@ -116,7 +111,7 @@ class HtlmContentController {
             });
          
             if (ammendedURL==null){
-            return  response.status(500).json("File name is invalid");
+                return  response.status(500).json("File name is invalid");
             }
             response.status(200).header({ "Content-Type": "text/html" });
             response.end(ammendedURL);
