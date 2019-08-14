@@ -1,25 +1,14 @@
 {
   "highlights": [
     {
-    "adervertisingImageName": "lALPAuoR5ucdoyTNAVDNAyA_800_336.png",
+    "adervertisingImageName": "image1.png",
     "associatedProductsIds": [],
-    "associatedCategoryId": 253
+    "associatedCategoryId": 0
     },
 	 {
-    "adervertisingImageName": "lALPBE1XX0DuPkvNAVDNAyA_800_336.png",
+    "adervertisingImageName": "image2.png",
     "associatedProductsIds": [],
     "associatedCategoryId": 0
-    },
-    {
-    "adervertisingImageName": "lALPBE1XX0DuUczNAVDNAyA_800_336.png",
-    "associatedProductsIds": [],
-    "associatedCategoryId": 0
-    }
-    ,
-    {
-        "adervertisingImageName": "newimage.png",
-        "associatedProductsIds": [],
-        "associatedCategoryId": 0
     }
   ]
 }
