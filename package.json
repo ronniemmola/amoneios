@@ -30,7 +30,7 @@
     "gulp": "^3.9.1",
     "js-sha512": "^0.8.0",
     "moment": "^2.21.0",
-    "mongoose": "^5.5.5",
+    "mongoose": "^5.7.5",
     "randomstring": "^1.1.5",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
